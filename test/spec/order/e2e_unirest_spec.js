@@ -15,106 +15,87 @@ describe('Give it some context', function () {
     });
   });
 
-// describe('Create Credit', function () {
-//     it('should create credit', function (done) {
-//         mov.CR01(data.new_credit, done, function (res, done) {
-//             if (res.code != 204)
-//                 console.log(JSON.stringify(res.body));
+describe('Value Lifecycle', function () {
+    
+    it('should create value', function (done) {
+        value_po.VA01(data.new_value, done, function (res, done) {
+            if (res.code != 200)
+                console.log(JSON.stringify(res.body));
 
-//             expect(res.code).toBe(204);
+            expect(res.code).toBe(200);
+            setTimeout(function(done) {
+                value_po.VA02(null, done, function (res, done) {
+                    if (res.code != 200)
+                        console.log(JSON.stringify(res.body));
 
-//             mov.PA01(data.get_parameters, done, function (res, done) {
-//                 if (res.code != 200)
-//                     console.log(JSON.stringify(res.body));
+                    expect(res.code).toBe(200);
+                    res.body.forEach(function (element) {
+                        //console.log('riga: ' + element.name + ',' + data.new_value.name)
+                        if (element.name == data.new_value.name) {
+                            data.new_value.id = element.id;
+                            data.update_value.id = element.id;
+                            done();
+                        }
+                    }, data);
 
-//                 expect(res.code).toBe(200);
-//                 res.body.forEach(function (element) {
-//                     //console.log('riga: ' + element.IdTrx.trim() + ',' + data.id.id) // + ',' + element.IdTrx.trim() == data.id.id)
-//                     if (element.IdTrx.trim() == data.id.id && element.ShopId == null) {
-//                         done();
-//                     }
-//                 }, data);
+                });
+            }, 500, done);
+        });
+    });
 
-//             });
-//         });
-//     });
+    it('should get value', function (done) {
 
-//     it('should create order info', function (done) {
-//         mov.OR01(data.new_order, done, function (res, done) {
-//             if (res.code != 204)
-//                 console.log(JSON.stringify(res.body));
+        value_po.VA03(data.new_value, done, function (res, done) {
+            if (res.code != 200)
+                console.log(JSON.stringify(res.body));
 
-//             expect(res.code).toBe(204);
-//             mov.PA01(data.get_parameters, done, function (res, done) {
-//                 if (res.code != 200)
-//                     console.log(JSON.stringify(res.body));
+            expect(res.code).toBe(200);
+            console.log(data.new_value.id);
+            expect(res.body.id).toBe(data.new_value.id);
+            expect(res.body.name).toBe(data.new_value.name);
+            done();
+        });
 
-//                 expect(res.code).toBe(200);
-//                 res.body.forEach(function (element) {
-//                     if (element.IdTrx.trim() == data.id.id && element.ShopId != null) {
-//                         done();
-//                     }
-//                 }, data);
-                
-//             });
-//         });
-//     });
+    });
 
-//     it('should create refund', function (done) {
-//         sto.RE02(data.new_refund, done, function (res, done) {
-//             if (res.code != 204)
-//                 console.log(JSON.stringify(res.body));
+    it('should update value', function (done) {
+        value_po.VA04(data.update_value, done, function (res, done) {
+            if (res.code != 200)
+                console.log(JSON.stringify(res.body));
 
-//             expect(res.code).toBe(204);
+            expect(res.code).toBe(200);
 
-//             sto.PA01(data.get_parameters_sto, done, function (res, done) {
-//                 if (res.code != 200)
-//                     console.log(JSON.stringify(res.body));
+            setTimeout(function(done) {
+                value_po.VA03(data.new_value, done, function (res, done) {
+                    if (res.code != 200)
+                        console.log(JSON.stringify(res.body));
 
-//                 expect(res.code).toBe(200);
-//                 var _founded = false;
-//                 for (i = 0; i < res.body.length; i++) { 
-//                     if (res.body[i].IdTrx.trim() == data.id.id) {
-//                         _founded = true;
-//                     }
-//                 }
-//                 if(!_founded){
-//                     done();
-//                 }
-//             });
-//         });
-//     });
+                    expect(res.code).toBe(200);
+                    expect(res.body.id).toBe(data.new_value.id);
+                    expect(res.body.name).toBe(data.update_value.name);
+                    done();
+                });
+            }, 500, done);
+        });
+    });
 
-//     it('should execute refund', function (done) {
-//         sto.RE01(data.get_parameters_sto, done, function (res, done) {
-//             if (res.code != 200)
-//                 console.log(JSON.stringify(res.body));
+    it('should delete value', function (done) {
+        value_po.VA05(data.update_value, done, function (res, done) {
+            if (res.code != 200)
+                console.log(JSON.stringify(res.body));
 
-//             expect(res.code).toBe(200);
+            expect(res.code).toBe(200);
 
-//             res.body.forEach(function (element) {
-//                 if (element.IdTrx.trim() == data.id.id) {
-//                     sto.RE03(element, done, function (res, done) {
-//                         if (res.code != 204)
-//                             console.log(JSON.stringify(res.body));
+            setTimeout(function(done) {
+                value_po.VA03(data.new_value, done, function (res, done) {
+                    if (res.code != 200)
+                        console.log(JSON.stringify(res.body));
 
-//                         expect(res.code).toBe(204);
-//                         sto.PA01(data.get_parameters_sto, done, function (res, done) {
-//                             if (res.code != 200)
-//                                 console.log(JSON.stringify(res.body));
-
-//                             expect(res.code).toBe(200);
-//                             res.body.forEach(function (element) {
-//                                 if (element.IdTrx.trim() == data.id.id) {
-//                                     done();
-//                                 }
-//                             }, data);
-//                         });
-                        
-//                     });
-                    
-//                 }
-//             }, data);
-//         });
-//     });
-// });
+                    expect(res.code).toBe(200);
+                    expect(res.body.name).toBe(null);
+                    done();
+                });
+            }, 500, done);
+        });
+    });
+});

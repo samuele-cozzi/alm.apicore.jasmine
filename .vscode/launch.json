@@ -16,7 +16,7 @@
             ],
             "env": {
                 "NODE_ENV": "development",
-                "server": "http://dev.servicesbo.eprice.local/MPInvoiceSystem",
+                "server": "http://localhost:5000",
                 "defaultTimeoutInterval": 8000
             },
             "console": "internalConsole",

@@ -7,16 +7,8 @@ var test_data = new ValueData();
 var data = test_data.inizialize_test_data();
 console.log(JSON.stringify(data));
 
-describe('Give it some context', function () {
-    describe('maybe a bit more context here', function () {
-      it('should run here few assertions', function () {
-        expect(true).toBe(true);
-      });
-    });
-  });
-
 describe('Value Lifecycle', function () {
-    
+
     it('should create value', function (done) {
         value_po.VA01(data.new_value, done, function (res, done) {
             if (res.code != 200)

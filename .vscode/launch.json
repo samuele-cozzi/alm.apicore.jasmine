@@ -15,7 +15,9 @@
                 "--nolazy"
             ],
             "env": {
-                "NODE_ENV": "development"
+                "NODE_ENV": "development",
+                "server": "http://dev.servicesbo.eprice.local/MPInvoiceSystem",
+                "defaultTimeoutInterval": 8000
             },
             "console": "internalConsole",
             "sourceMaps": false,
